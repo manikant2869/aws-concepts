@@ -1,0 +1,18 @@
+#!/usr/bin/env bash;
+
+if [ -z $1 ];
+then
+   echo "We are unable to put objects. Please specify the bucket name..  and rerun the scripts";
+   exit 1;
+fi
+
+if [ -z $2 ];
+then 
+  echo "We are unable to pub objects. Please specify the file name to put in the bucket in second argument and rerun the scripts";
+  exit 1;
+fi
+
+BUCKET_NAME=$1;
+FILENAME=$2;
+KEY=$(basename "$FILENAME");
+aws s3api put-object --bucket "${BUCKET_NAME}" --body "${FILENAME}" --key "${KEY}";
