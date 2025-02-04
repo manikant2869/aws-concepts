@@ -1,11 +1,11 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 echo "deleting-bucket";
 function isBucketNamedPassed() {
     if [ -z "$1" ];
     then
-      return 0;
-    else 
       return 200;
+    else 
+      return 0;
     fi
 
 }
@@ -16,9 +16,9 @@ isBucketNamedPassed "${bucketname}";
 func_status=$?;
   if [ "${func_status}" -eq 0 ];
     then 
-        return 0 ;
-    else 
         bucket="${bucketname}";
+        return 0 ;
+    else
         return 200;
     fi
 }
@@ -30,9 +30,9 @@ func_status=$?;
     
    if [ "${func_status}" -eq 0 ];
     then
-       echo "we are unable to delete bucket. Please rerun the scripts "
+            aws s3api delete-bucket --bucket "${bucket}";
     else 
-      aws s3api delete-bucket --bucket "${bucket}";
+      echo "We are unable to delete bucket. Please rerun the scripts";
     fi
     
 else
