@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+echo "deleting-bucket";
+isBucketPassed=$1;
+isJsonPassed=$2;
+function isBucketNamedPassed() {
+    if [ -z "$1" ];
+    then
+      return 200;
+    else 
+      return 0;
+    fi
+
+}
+bucket="";
+function askBucketName() {
+read -p "please specify the bucket name:: " bucketname;
+isBucketNamedPassed "${bucketname}";
+func_status=$?;
+  if [ "${func_status}" -eq 0 ];
+    then 
+        bucket="${bucketname}";
+        return 0 ;
+    else
+        return 200;
+    fi
+}
+if [ -z "$1" ];
+then
+askBucketName;
+func_status=$?;
+
+    
+   if [ "${func_status}" -ne 0 ];
+    then
+       echo "we are unable to delete bucket. Please rerun the scripts ";
+       exit 1;
+    fi
+
+fi
+
+jsonfile="";
+function isObjectJsonPassed (){
+  if [ -z "$1" ];
+  then 
+          return 200;
+  else 
+      return 0;
+  fi
+
+}
+function askObjectJson() {
+ read -p "Please provide the object json to delete:: " objectjson;
+isObjectJsonPassed "${objectjson}";
+func_status=$?;
+
+if [ "${func_status}" -eq 0 ];
+then 
+   jsonfile="${objectjson}"
+   return 0;
+else
+  return 200;
+fi
+}
+if [ -z "${isJsonPassed}" ];
+then 
+askObjectJson;
+func_status=$?
+    if [ "${func_status}" -ne 0 ];
+     then 
+           echo "We are unable to delete objects. Please rerun the scripts and passs both the bucket name and object json to delete";
+           exit 1;
+    fi
+fi
+
+aws s3api delete-objects --bucket "${bucket}" --delete file://"${jsonfile}";
+   
