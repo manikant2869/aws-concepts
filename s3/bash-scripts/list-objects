@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+echo "listing buckts ... ";
+if [ -z $1 ];
+then
+  echo "We are unable to list-objects. Please specify the bucket name as argument.";
+  exit 1;
+fi
+
+BUCKET_NAME=$1;
+
+aws s3api list-objects --bucket "${BUCKET_NAME}" --query 'Contents[].{Key: Key, Size: Size}' ;
